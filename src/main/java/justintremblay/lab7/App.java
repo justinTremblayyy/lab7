@@ -2,15 +2,20 @@ package justintremblay.lab7;
 
 import javafx.animation.FadeTransition;
 import javafx.animation.Interpolator;
+import javafx.animation.ParallelTransition;
 import javafx.animation.PathTransition;
 import javafx.animation.RotateTransition;
 import javafx.animation.ScaleTransition;
 import javafx.animation.SequentialTransition;
 import javafx.animation.TranslateTransition;
 import javafx.application.Application;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
@@ -25,6 +30,7 @@ public class App extends Application {
     
     private Circle objectA;
     private Ellipse objectB;
+    private ParallelTransition animation;
 
     @Override
     public void start(Stage primaryStage) {
@@ -84,10 +90,26 @@ public class App extends Application {
         moveUp.setToY(-80);
 
         SequentialTransition sequence = new SequentialTransition(fade, scale, rotate, moveUp);
-
         
+        
+        animation = new ParallelTransition(pathTransition, sequence);
+        
+        Button btnStart = new Button("Start");
+        Button btnReset = new Button("Reset");
+        Button btnExit = new Button("Exit");
+
+        btnStart.setOnAction(e -> animation.play());
+        btnReset.setOnAction(e -> animation.stop());
+        btnExit.setOnAction(e -> primaryStage.close());
+
+        HBox buttonBar = new HBox(15, btnStart, btnReset, btnExit);
+        buttonBar.setAlignment(Pos.CENTER);
+        buttonBar.setPadding(new Insets(15));
+        buttonBar.setStyle("-fx-border-color: black;");
+
         BorderPane root = new BorderPane();
         root.setCenter(animationPane);
+        root.setBottom(buttonBar);
 
         Scene scene = new Scene(root, 640, 420);
         primaryStage.setTitle("Path and Sequential Animation");
