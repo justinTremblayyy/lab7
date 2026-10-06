@@ -25,6 +25,9 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 
 
+ // Animation A: object A (circle) follows the rectangular path M N P Q
+ // animation B: object B (ellipse) follows this: fade, then scale, then rotate, then move upward
+
 public class App extends Application {
 
     
@@ -93,13 +96,16 @@ public class App extends Application {
         
         
         animation = new ParallelTransition(pathTransition, sequence);
-        
+
         Button btnStart = new Button("Start");
         Button btnReset = new Button("Reset");
         Button btnExit = new Button("Exit");
 
-        btnStart.setOnAction(e -> animation.play());
-        btnReset.setOnAction(e -> animation.stop());
+        btnStart.setOnAction(e -> {
+            resetAnimation();
+            animation.play();
+        });
+        btnReset.setOnAction(e -> resetAnimation());
         btnExit.setOnAction(e -> primaryStage.close());
 
         HBox buttonBar = new HBox(15, btnStart, btnReset, btnExit);
@@ -117,6 +123,22 @@ public class App extends Application {
         primaryStage.show();
     }
 
+    
+    
+    private void resetAnimation() {
+        
+        animation.stop();
+        objectA.setTranslateX(0);
+        objectA.setTranslateY(0);
+        objectB.setOpacity(1.0);
+        objectB.setScaleX(1);
+        objectB.setScaleY(1);
+        objectB.setRotate(0);
+        objectB.setTranslateY(0);
+        
+    }
+
+    
     public static void main(String[] args) {
         launch(args);
     }
